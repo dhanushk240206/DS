@@ -1,0 +1,150 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode-> data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+
+struct Node* createList() {
+    return NULL; 
+}
+
+
+void insertAtFirst(struct Node** head, int data) {
+    struct Node* newNode = createNode(data);
+    newNode->next = *head;
+    *head = newNode;
+    printf("Node %d inserted at the beginning.\n", data);
+}
+
+
+void insertAtEnd(struct Node** head, int data) {
+    struct Node* newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode;  
+        printf("Node %d inserted at the end.\n", data);
+        return;
+    }
+    struct Node* temp = *head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+    printf("Node %d inserted at the end.\n", data);
+}
+
+
+void insertAtPosition(struct Node** head, int data, int position) {
+    if (position < 1) {
+        printf("Invalid position.\n");
+        return;
+    }
+
+    struct Node* newNode = createNode(data);
+    if (position == 1) {
+        newNode->next = *head;
+        *head = newNode;
+        printf("Node %d inserted at position %d.\n", data, position);
+        return;
+    }
+
+    struct Node* temp = *head;
+    for (int i = 1; i < position - 1 && temp != NULL; i++) {
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        printf("Position out of bounds.\n");
+        return;
+    }
+
+    newNode->next = temp->next;
+    temp->next = newNode;
+    printf("Node %d inserted at position %d.\n", data, position);
+}
+
+
+void displayList(struct Node* head) {
+    if (head == NULL) {
+        printf("The list is empty.\n");
+        return;
+    }
+    struct Node* temp = head;
+    printf("List: ");
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    struct Node* head = createList();  
+    int choice, data, position;
+
+    while (1) {
+        
+        printf("\nMenu:\n");
+        printf("1. Create a linked list\n");
+        printf("2. Insert at the first position\n");
+        printf("3. Insert at any position\n");
+        printf("4. Insert at the end\n");
+        printf("5. Display the linked list\n");
+        printf("6. Exit\n");
+
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+               
+                head = createList();
+                printf("Linked list created.\n");
+                break;
+            case 2:
+               
+                printf("Enter the data to insert at the beginning: ");
+                scanf("%d", &data);
+                insertAtFirst(&head, data);
+                break;
+            case 3:
+             
+                printf("Enter the data to insert: ");
+                scanf("%d", &data);
+                printf("Enter the position: ");
+                scanf("%d", &position);
+                insertAtPosition(&head, data, position);
+                break;
+            case 4:
+               
+                printf("Enter the data to insert at the end: ");
+                scanf("%d", &data);
+                insertAtEnd(&head, data);
+                break;
+            case 5:
+                
+                displayList(head);
+                break;
+            case 6:
+              
+                printf("Exiting...\n");
+                exit(0);
+                break;
+            default:
+                printf("Invalid choice. Please try again.\n");
+        }
+    }
+
+    return 0;
+}
