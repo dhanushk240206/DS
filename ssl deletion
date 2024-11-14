@@ -1,0 +1,125 @@
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    struct node * next;
+};
+
+struct node * createnode (int data){
+    struct node * new_node ;
+    new_node = (struct node *) malloc(sizeof(struct node));
+    new_node->data = data;
+    new_node->next = NULL;
+    return new_node;
+}
+
+struct node* insertion(struct node * head, int data){
+    struct node * new_node = createnode(data);
+    new_node->next = head;
+    head = new_node;
+    return head;
+}
+
+struct node* DB(struct node * head){
+    struct node* ptr;
+    if (head==NULL){
+        printf("Empty");
+    }
+    else{
+        ptr=head;
+        head=head->next;
+        free(ptr);
+    }
+    return head;
+}
+
+struct node* DE(struct node * head){
+    struct node* ptr;
+    struct node* prev;
+    if (head==NULL){
+        printf("Empty");
+    }
+    else if (head->next == NULL){
+        free(head);
+        head=NULL;
+    }
+    else{
+        ptr = head;
+        while(ptr->next != NULL){
+            prev = ptr;
+            ptr= ptr->next;
+        }
+        prev->next=NULL;
+        free(ptr);
+    }
+    return head;
+}
+
+struct node* DP(struct node *head, int pos) {
+    if (head == NULL) {
+        printf("Empty list\n");
+        return NULL;
+    }
+    
+   
+    if (pos == 1) {
+        struct node* temp = head;
+        head = head->next;
+        free(temp);
+        return head;
+    }
+
+    struct node* ptr = head;
+    struct node* prev = NULL;
+
+ 
+    for (int i = 1; ptr != NULL && i < pos; i++) {
+        prev = ptr;
+        ptr = ptr->next;
+    }
+
+  
+    if (ptr == NULL) {
+        printf("Position out of range\n");
+        return head;
+    }
+
+ 
+    prev->next = ptr->next;
+    free(ptr);
+
+    return head;
+}
+
+
+struct node* display(struct node * head){
+    struct node * temp = head;
+    while(temp != NULL){
+        printf("%d ->",temp->data);
+        temp= temp->next;
+    }
+printf("Null\n");    
+}
+
+void main(){
+    struct node* head=NULL;
+    head= insertion(head,10);
+    head= insertion(head,20);
+    head= insertion(head,30);
+    head= insertion(head,40);
+    head= insertion(head,50);
+  display(head);
+    head = DB(head);
+  display(head);
+   head = DE(head);
+  display(head);
+  head = DP(head,2);
+  display(head);
+}
+
+
+
+
+
